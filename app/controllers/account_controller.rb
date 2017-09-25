@@ -34,14 +34,39 @@ class AccountController < ActionController::API
 	end
 
 	def sign_in
-		session = new_session(params[:username], params[:password])
-		if session == 2
+		session_key = new_session(params[:username], params[:password])
+		if session_key == 2
 			@response[:error] = 2
-		elsif session.class.name == 'String'
+		elsif session_key.class.name == 'String'
 			@response[:error] = 0
-			@response[:body] = session
+			@response[:body] = session_key
 		end
-		@response[:body] = init_session(session).account
+		init = init_session(session_key)
+		unless init.nil?
+			@response[:body] = init_session(session_key).session_key
+		end
+		render json: @response
+	end
+
+	def sign_out
+		init_session(params[:session_key])
+
+		if delete_session
+			@response[:error] = 0
+		end
+		render json: @response
+	end
+
+	def current_user
+		init_session(params[:session_key])
+		puts "Is auth."
+		puts $is_auth
+		if $is_auth == true
+			@response[:error] = 0
+			@response[:body] = $current_user
+		else
+			@response[:error] = 2
+		end
 		render json: @response
 	end
 end

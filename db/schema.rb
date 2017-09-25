@@ -36,16 +36,16 @@ ActiveRecord::Schema.define(version: 20170925072133) do
     t.index ["username"], name: "index_accounts_on_username", unique: true
   end
 
-  create_table "sessions", id: false, force: :cascade do |t|
+  create_table "sessions", force: :cascade do |t|
     t.bigint "account_id"
-    t.string "key"
+    t.string "session_key"
     t.string "user_agent"
     t.string "ip"
     t.integer "expire_time"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_sessions_on_account_id"
-    t.index ["key"], name: "index_sessions_on_key", unique: true
+    t.index ["session_key"], name: "index_sessions_on_session_key", unique: true
   end
 
   add_foreign_key "sessions", "accounts"

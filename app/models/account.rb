@@ -62,4 +62,6 @@ class Account < ApplicationRecord
         inclusion: { in: [0, 1], message: "invalid" }
     validates :password,
         length: { minimum: 6, maximum: 100, too_short: "min", too_long: "max" }
+
+    has_many :sessions, class_name: "Session", foreign_key: "account_id", dependent: :destroy
 end
