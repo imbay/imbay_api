@@ -1,0 +1,23 @@
+default: &default
+  adapter: postgresql
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+  encoding: utf8
+  host: 127.0.0.1
+  port: 5432
+  username: nurasyl
+  password: mGVgHM47zBm9nJzG
+  database: imbay
+
+development:
+  <<: *default
+  database: imaby_development
+  password: 12345
+
+test:
+  <<: *default
+  database: imbay_test
+  password: 12345
+
+production:
+  <<: *default
