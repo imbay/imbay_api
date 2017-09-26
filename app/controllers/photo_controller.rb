@@ -98,27 +98,40 @@ class PhotoController < ApplicationController
         end
         render json: @response
     end
+    def write_comment
+        init_session(params[:session_key])
+        if $is_auth == true
+            ActiveRecord::Base.transaction(isolation: :serializable) do
+                photo = Photo.find(params[:photo_id]) rescue nil
+                unless photo.nil?
+                    comment = photo.Comments.new
+                    comment.text = params[:text]
+                    begin
+                        comment.save!
+                        @response[:error] = 0
+                    rescue ActiveRecord::RecordInvalid
+                        @response[:error] = 3
+                        @response[:body] = comment.errors.messages
+                    end
+                else
+                    @response[:error] = 4
+                end
+            end
+        end
+        render json: @response
+    end
     def to_like
         init_session(params[:session_key])
         if $is_auth == true
             ActiveRecord::Base.transaction(isolation: :serializable) do
-                photo = Photo.find(params[:id]) rescue nil
+                photo = Photo.find(params[:photo_id]) rescue nil
                 unless photo.nil?
-                    like = photo.likes.find_by(account_id: $current_user.id) rescue nil
-                    if like.nil?
-                        # first like.
-                        photo.likes = photo.likes+1
-                        photo.save!
-                        like.account = current_user
-                        photo.save!
-                        @response[:error] = 0
-                    else
-                        # update like.
-                        like.up = params[:like].to_i
+                    like = photo.Likes.new
+                    like.up = params[:up]
+                    begin
                         like.save!
-                        photo.likes = photo.likes+1
-                        photo.save!
                         @response[:error] = 0
+                    rescue
                     end
                 else
                     @response[:error] = 4
@@ -131,42 +144,13 @@ class PhotoController < ApplicationController
         init_session(params[:session_key])
         if $is_auth == true
             ActiveRecord::Base.transaction(isolation: :serializable) do
-                photo = Photo.find(params[:id]) rescue nil
+                photo = Photo.find(params[:photo_id]) rescue nil
                 unless photo.nil?
-                    unless photo.views.find_by(account_id: $current_user.id).exists?
-                        # first view.
-                        view = photo.views.new
-                        view.account = $current_user
-                        view.save!
-                        photo.views = photo.views+1
-                        photo.save!
-                        @response[:error] = 0
-                    end
-                else
-                    @response[:error] = 4
-                end
-            end
-        end
-        render json: @response
-    end
-    def to_comment
-        init_session(params[:session_key])
-        if $is_auth == true
-            ActiveRecord::Base.transaction(isolation: :serializable) do
-                photo = Photo.find(params[:id]) rescue nil
-                unless photo.nil?
-                    comment = photo.comments.new
-                    comment.account = $current_user
-                    comment.text = params[:text].to_s.strip
+                    view = photo.Views.new
                     begin
-                        comment.save!
-                        photo.comments = photo.comments+1
-                        photo.new_comments = photo.new_comments+1
-                        photo.save!
+                        view.save!
                         @response[:error] = 0
-                    rescue ActiveRecord::RecordInvalid
-                        @response[:error] = 3
-                        @response[:body] = comment.errors.messages
+                    rescue
                     end
                 else
                     @response[:error] = 4

@@ -4,12 +4,12 @@ class Photo < ApplicationRecord
 	COUNT_LIMIT = 10
 
 	belongs_to :account, class_name: "Account", foreign_key: "account_id"
-	has_many :likes, class_name: "Like", foreign_key: "photo_id", dependent: :destroy
-	has_many :comments, class_name: "Comment", foreign_key: "comment_id", dependent: :destroy
-	has_many :views, class_name: "View", foreign_key: "view_id", dependent: :destroy
+	has_many :Likes, class_name: "Like", foreign_key: "photo_id", dependent: :destroy
+	has_many :Comments, class_name: "Comment", foreign_key: "photo_id", dependent: :destroy
+	has_many :Views, class_name: "View", foreign_key: "photo_id", dependent: :destroy
 
 	validate :validate_image
-	before_save do
+	before_save(if: :new_record?) do
 		self.content = File.read(@image.path)
 	end
 	private

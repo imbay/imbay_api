@@ -66,4 +66,5 @@ class Account < ApplicationRecord
 
     has_many :sessions, class_name: "Session", foreign_key: "account_id", dependent: :destroy
     has_many :photos, class_name: "Photo", foreign_key: "account_id", dependent: :destroy
+    has_many :comments, class_name: "Comment", foreign_key: "account_id", dependent: :destroy
 end
