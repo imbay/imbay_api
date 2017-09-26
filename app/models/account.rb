@@ -33,6 +33,7 @@ class Account < ApplicationRecord
         self.last_name_ru = name_to_russian self.last_name
         self.first_name_en = name_to_english self.first_name
         self.last_name_en = name_to_english self.last_name
+        self.gender = @normalizer.gender self.gender
         self.language = @normalizer.language self.language
         unless self.new_record?
             self.is_active = @normalizer.is_active self.is_active if self.is_active_changed?

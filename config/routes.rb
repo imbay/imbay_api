@@ -13,6 +13,7 @@ Rails.application.routes.draw do
           post '/read_comments', to: 'photo#read_comments'
           get '/list', to: 'photo#list'
           get '/content/:id', to: 'photo#content'
+          get '/get', to: 'photo#get'
         end
     end
   end
