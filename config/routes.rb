@@ -10,6 +10,9 @@ Rails.application.routes.draw do
         scope :photo do
           post '/upload', to: 'photo#upload'
           post '/delete', to: 'photo#delete'
+          post '/read_comments', to: 'photo#read_comments'
+          get '/list', to: 'photo#list'
+          get '/content/:id', to: 'photo#content'
         end
     end
   end

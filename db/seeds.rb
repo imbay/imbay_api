@@ -1,4 +1,7 @@
 class DropTables < ActiveRecord::Migration[5.1]
+    drop_table :views, if_exists: true
+    drop_table :likes, if_exists: true
+    drop_table :comments, if_exists: true
     drop_table :photos, if_exists: true
     drop_table :sessions, if_exists: true
     drop_table :accounts, if_exists: true

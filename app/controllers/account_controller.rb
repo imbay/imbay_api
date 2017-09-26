@@ -59,8 +59,6 @@ class AccountController < ActionController::API
 
 	def current_user
 		init_session(params[:session_key])
-		puts "Is auth."
-		puts $is_auth
 		if $is_auth == true
 			@response[:error] = 0
 			@response[:body] = $current_user

@@ -6,6 +6,9 @@ class Photo < ApplicationRecord
 	belongs_to :account, class_name: "Account", foreign_key: "account_id"
 
 	validate :validate_image
+	before_save do
+		self.content = File.read(@image.path)
+	end
 	private
 		def validate_image
 			# count.

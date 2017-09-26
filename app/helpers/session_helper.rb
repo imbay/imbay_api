@@ -24,6 +24,11 @@ module SessionHelper
             $current_user = session.account
             $is_auth = true
         end
+
+        if $is_auth == false
+            @response[:error] = 2
+            @response[:body] = nil
+        end
         return session
     end
     def delete_session

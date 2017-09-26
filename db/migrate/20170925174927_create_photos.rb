@@ -1,6 +1,6 @@
 class CreatePhotos < ActiveRecord::Migration[5.1]
   def change
-    create_table :photos, force: true do |t|
+    create_table :photos do |t|
       t.references	:account, index: true, foreign_key: { to_table: :accounts }
       t.integer     :views, default: 0
       t.integer     :likes, default: 0
