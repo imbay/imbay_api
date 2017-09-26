@@ -120,18 +120,19 @@ class PhotoController < ApplicationController
         end
         render json: @response
     end
-    def to_like
+    def to_view
         init_session(params[:session_key])
         if $is_auth == true
             ActiveRecord::Base.transaction(isolation: :serializable) do
                 photo = Photo.find(params[:photo_id]) rescue nil
                 unless photo.nil?
-                    like = photo.Likes.new
-                    like.up = params[:up]
                     begin
-                        like.save!
+                        view = photo.Views.new
+                        view.save!
                         @response[:error] = 0
-                    rescue
+                    rescue ActiveRecord::RecordInvalid
+                        @response[:error] = 3
+                        @response[:body] = view.errors.messages
                     end
                 else
                     @response[:error] = 4
@@ -140,17 +141,20 @@ class PhotoController < ApplicationController
         end
         render json: @response
     end
-    def to_view
+    def to_like
         init_session(params[:session_key])
         if $is_auth == true
             ActiveRecord::Base.transaction(isolation: :serializable) do
                 photo = Photo.find(params[:photo_id]) rescue nil
                 unless photo.nil?
-                    view = photo.Views.new
                     begin
-                        view.save!
+                        like = photo.Likes.new
+                        like.up = params[:up]
+                        like.save!
                         @response[:error] = 0
-                    rescue
+                    rescue ActiveRecord::RecordInvalid
+                        @response[:error] = 3
+                        @response[:error] = like.errors.messages
                     end
                 else
                     @response[:error] = 4

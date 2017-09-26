@@ -15,6 +15,8 @@ Rails.application.routes.draw do
           get '/content/:id', to: 'photo#content'
           get '/get', to: 'photo#get'
           post '/write_comment', to: 'photo#write_comment'
+          post '/to_view', to: 'photo#to_view'
+          post '/to_like', to: 'photo#to_like'
         end
     end
   end
