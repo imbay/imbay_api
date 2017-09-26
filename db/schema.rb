@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170925072133) do
+ActiveRecord::Schema.define(version: 20170925174927) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,19 @@ ActiveRecord::Schema.define(version: 20170925072133) do
     t.index ["username"], name: "index_accounts_on_username", unique: true
   end
 
+  create_table "photos", force: :cascade do |t|
+    t.bigint "account_id"
+    t.integer "views", default: 0
+    t.integer "likes", default: 0
+    t.integer "dislikes", default: 0
+    t.integer "comments", default: 0
+    t.integer "new_comments", default: 0
+    t.binary "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_photos_on_account_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "account_id"
     t.string "session_key"
@@ -48,5 +61,6 @@ ActiveRecord::Schema.define(version: 20170925072133) do
     t.index ["session_key"], name: "index_sessions_on_session_key", unique: true
   end
 
+  add_foreign_key "photos", "accounts"
   add_foreign_key "sessions", "accounts"
 end

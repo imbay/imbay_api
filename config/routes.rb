@@ -7,6 +7,10 @@ Rails.application.routes.draw do
             post '/sign_out', to: 'account#sign_out'
             post '/current_user', to: 'account#current_user'
         end
+        scope :photo do
+          post '/upload', to: 'photo#upload'
+          post '/delete', to: 'photo#delete'
+        end
     end
   end
 end

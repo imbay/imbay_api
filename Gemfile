@@ -48,3 +48,5 @@ gem 'redis', '~> 3.2'
 gem 'will_paginate', '~> 3.1.0'
 # File MIME types.
 gem 'mimemagic', '~> 0.3.1'
+# Magick.
+gem 'mini_magick', '~> 4.5'

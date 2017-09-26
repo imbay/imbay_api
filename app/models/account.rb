@@ -64,4 +64,5 @@ class Account < ApplicationRecord
         length: { minimum: 6, maximum: 100, too_short: "min", too_long: "max" }
 
     has_many :sessions, class_name: "Session", foreign_key: "account_id", dependent: :destroy
+    has_many :photos, class_name: "Photo", foreign_key: "account_id", dependent: :destroy
 end
