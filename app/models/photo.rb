@@ -16,29 +16,29 @@ class Photo < ApplicationRecord
 		def validate_image
 			# count.
 			if $current_user.photos.count(:id) >= COUNT_LIMIT
-				errors.add(:file, "count")
+				errors.add(:image, "count")
 				return false
 			end
 			# mime.
 			begin
 				@image = MiniMagick::Image.open(self.file.path)
 				unless @image.mime_type == "image/jpeg" || @image.mime_type == "image/png" || @image.mime_type == "image/gif"
-					errors.add(:file, "mime")
+					errors.add(:image, "mime")
 					return false
 				end
 			rescue
-				errors.add(:file, "invalid")
+				errors.add(:image, "invalid")
 				return false
 			end
 			# size.
 			if self.file.size > SIZE_LIMIT
-				errors.add(:file, "size")
+				errors.add(:image, "size")
 				return false
 			end
 			# pixels.
 			resize_and_format
 			if @image.height > 500 || @image.height < 200
-				errors.add(:file, "pixels")
+				errors.add(:image, "pixels")
 				return false
 			end
 		end

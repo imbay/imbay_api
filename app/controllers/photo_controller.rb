@@ -60,7 +60,7 @@ class PhotoController < ApplicationController
         if $is_auth == true
             begin
                 @response[:error] = 0
-                @response[:body] = $current_user.photos.select(:id, :views, :likes, :dislikes, :comments, :new_comments).limit(Photo::COUNT_LIMIT).order(new_comments: :desc, likes: :desc).all
+                @response[:body] = $current_user.photos.select(:id, :views, :likes, :dislikes, :comments, :new_comments).limit(Photo::COUNT_LIMIT).order(new_comments: :desc, id: :desc).all
             rescue
             end
         end
@@ -80,11 +80,11 @@ class PhotoController < ApplicationController
         if $is_auth == true
             begin
                 @response[:error] = 0
-                photo = Photo.joins(:account).select('id', 'accounts.username', 'accounts.first_name', 'accounts.last_name').order("views ASC, likes ASC, comments ASC").where("accounts.is_active = ? AND accounts.gender = ?", true, @normalizer.gender(params[:gender])).limit(100).all[rand(Photo.all.limit(100).count(:id))] rescue nil
+                gender = @normalizer.gender(params[:gender])
+                photo = Photo.joins(:account).select('id', 'accounts.username', 'accounts.first_name', 'accounts.last_name').order("views ASC, likes ASC, comments ASC").where("accounts.is_active = ? AND accounts.gender = ?", true, gender).all rescue nil
                 unless photo.nil?
+                    photo = photo[rand(photo.size)-1]
                     like = photo.Likes.select(:up).find_by(account_id: $current_user.id) rescue nil
-                    puts "test:"
-                    puts like.class.name
                     photo = photo.serializable_hash
                     if like == nil
                         photo['like'] = nil
