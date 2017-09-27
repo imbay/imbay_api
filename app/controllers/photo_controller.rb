@@ -44,7 +44,7 @@ class PhotoController < ApplicationController
         init_session(params[:session_key])
         if $is_auth == true
             ActiveRecord::Base.transaction(isolation: :serializable) do
-                photo = $current_user.photos.find(params[:id]) rescue nil
+                photo = $current_user.photos.find(params[:photo_id]) rescue nil
                 unless photo.nil?
                     photo.new_comments = 0
                     if photo.save == true
@@ -60,7 +60,7 @@ class PhotoController < ApplicationController
         if $is_auth == true
             begin
                 @response[:error] = 0
-                @response[:body] = $current_user.photos.select(:id, :views, :likes, :dislikes, :comments, :new_comments).limit(Photo::COUNT_LIMIT).order(id: :desc).all
+                @response[:body] = $current_user.photos.select(:id, :views, :likes, :dislikes, :comments, :new_comments).limit(Photo::COUNT_LIMIT).order(new_comments: :desc, likes: :desc).all
             rescue
             end
         end
@@ -166,13 +166,9 @@ class PhotoController < ApplicationController
     def comments
         init_session(params[:session_key])
         if $is_auth == true
-            begin
-                comments = $current_user.photos.find(params[:id]).comments.limit(500).select(:id, :text).order(id: :desc).all
+                comments = $current_user.photos.find(params[:photo_id]).Comments.joins(:account).select(:id, :text, "accounts.id AS user_id, accounts.username, accounts.first_name, accounts.last_name").order(id: :desc).limit(500).all
                 @response[:error] = 0
                 @response[:body] = comments
-            rescue
-                @response[:error] = []
-            end
         end
         render json: @response
     end

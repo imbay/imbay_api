@@ -20,7 +20,7 @@ class AccountController < ActionController::API
                 account.first_name = params[:first_name]
                 account.last_name = params[:last_name]
                 account.gender = params[:gender]
-                account.language = params[:language]
+                account.language = 'ru'
                 account.save!
                 
                 @response[:error] = 0

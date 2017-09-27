@@ -17,6 +17,7 @@ Rails.application.routes.draw do
           post '/write_comment', to: 'photo#write_comment'
           post '/to_view', to: 'photo#to_view'
           post '/to_like', to: 'photo#to_like'
+          get '/comments', to: 'photo#comments'
         end
     end
   end
