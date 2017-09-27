@@ -47,7 +47,7 @@ class PhotoController < ApplicationController
                 photo = $current_user.photos.find(params[:photo_id]) rescue nil
                 unless photo.nil?
                     photo.new_comments = 0
-                    if photo.save == true
+                    if photo.save(validate: false) == true
                         @response[:error] = 0
                     end
                 end
@@ -82,12 +82,14 @@ class PhotoController < ApplicationController
                 @response[:error] = 0
                 photo = Photo.joins(:account).select('id', 'accounts.username', 'accounts.first_name', 'accounts.last_name').order("views ASC, likes ASC, comments ASC").where("accounts.is_active = ? AND accounts.gender = ?", true, @normalizer.gender(params[:gender])).limit(100).all[rand(Photo.all.limit(100).count(:id))] rescue nil
                 unless photo.nil?
+                    like = photo.Likes.select(:up).find_by(account_id: $current_user.id) rescue nil
+                    puts "test:"
+                    puts like.class.name
                     photo = photo.serializable_hash
-                    like = photo.likes.find_by(photo_id: photo.id, account_id: $current_user.id).select('up') rescue nil
                     if like == nil
                         photo['like'] = nil
                     else
-                        photo['like'] = like.up
+                        photo['like'] = like[:up]
                     end
                     @response[:body] = photo
                 else
