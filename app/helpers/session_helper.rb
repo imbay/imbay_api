@@ -34,10 +34,8 @@ module SessionHelper
     def delete_session
         if $is_auth == true
             session = $current_user.sessions.find_by(session_key: $session_key) rescue nil
-            puts "test"
-            puts session.class.name
             unless session.nil?
-                if session.delete
+                if session.destroy
                     return true
                 end
             end
@@ -46,13 +44,8 @@ module SessionHelper
     end
     def clear_sessions
         if $is_auth == true
-            session = $current_user.sessions.find_by(session_key: $session_key) rescue nil
-            puts "test"
-            puts session.class.name
-            unless session.nil?
-                if session.delete_all
-                    return true
-                end
+            if $current_user.sessions.destroy_all
+                return true
             end
         end
         return false

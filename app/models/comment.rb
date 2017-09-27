@@ -1,5 +1,5 @@
 class Comment < ApplicationRecord
-    COUNT_LIMIT = 500
+    COUNT_LIMIT = 1000
 
     belongs_to :account, class_name: "Account", foreign_key: "account_id"
     belongs_to :photo, class_name: "Photo", foreign_key: "photo_id"

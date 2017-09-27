@@ -1,7 +1,7 @@
 class Photo < ApplicationRecord
 	attr_accessor :file
 	SIZE_LIMIT = 5000000 # 5 MB.
-	COUNT_LIMIT = 10
+	COUNT_LIMIT = 20
 
 	belongs_to :account, class_name: "Account", foreign_key: "account_id"
 	has_many :Likes, class_name: "Like", foreign_key: "photo_id", dependent: :destroy
@@ -37,7 +37,7 @@ class Photo < ApplicationRecord
 			end
 			# pixels.
 			resize_and_format
-			if @image.height > 500 || @image.height < 200
+			if @image.height > 600 || @image.height < 150
 				errors.add(:image, "pixels")
 				return false
 			end

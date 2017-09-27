@@ -6,6 +6,11 @@ Rails.application.routes.draw do
             post '/sign_in', to: 'account#sign_in'
             post '/sign_out', to: 'account#sign_out'
             post '/current_user', to: 'account#current_user'
+            scope :update do
+              post '/', to: 'account#update'
+              post '/username', to: 'account#update_username'
+              post '/password', to: 'account#update_password'
+            end
         end
         scope :photo do
           post '/upload', to: 'photo#upload'
