@@ -31,9 +31,9 @@ class PhotoController < ApplicationController
     def delete
         init_session(params[:session_key])
 		if $is_auth == true
-            photo = $current_user.photos.find(params[:id]) rescue nil
+            photo = $current_user.photos.find(params[:photo_id]) rescue nil
             unless photo.nil?
-                if photo.delete == true
+                if photo.destroy
                     @response[:error] = 0
                 end
             end
@@ -80,7 +80,7 @@ class PhotoController < ApplicationController
         if $is_auth == true
             begin
                 @response[:error] = 0
-                photo = Photo.joins(:account).select('id', 'accounts.username', 'accounts.first_name', 'accounts.last_name').order("accounts.login_at DESC, views ASC, likes ASC, comments ASC").where("accounts.is_active = ? AND accounts.gender = ?", true, @normalizer.gender(params[:gender])).first rescue nil
+                photo = Photo.joins(:account).select('id', 'accounts.username', 'accounts.first_name', 'accounts.last_name').order("views ASC, likes ASC, comments ASC").where("accounts.is_active = ? AND accounts.gender = ?", true, @normalizer.gender(params[:gender])).limit(100).all[rand(Photo.all.limit(100).count(:id))] rescue nil
                 unless photo.nil?
                     photo = photo.serializable_hash
                     like = photo.likes.find_by(photo_id: photo.id, account_id: $current_user.id).select('up') rescue nil
