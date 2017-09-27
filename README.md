@@ -1,25 +1,22 @@
-####**Linux Ubuntu 16.04.3 LTS**
+####**Linux Ubuntu 16.04.3 LTS (Xenial)**
 
 ---
 ##### Install Ruby
 ```
-apt-add-repository ppa:brightbox/ruby-ng &&\
-apt update &&\
-apt install libxml2-dev libssl-dev &&\
-libyaml-dev zlib1g-dev&&\
-sqlite3 libsqlite3-dev &&\
-ruby2.4 ruby2.4-dev
-```
-##### Install Ruby on Rails
-```
-gem install bundler:1.15.3 rails:5.1.2 --no-ri --no-rdoc
+sudo apt-add-repository ppa:brightbox/ruby-ng &&\
+sudo apt update &&\
+sudo apt install sqlite3 libsqlite3-dev ruby2.4 ruby2.4-dev
 ```
 ##### Install NodeJS & NPM
 ```
-apt install curl &&\
+sudo apt install curl &&\
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - &&\
-apt update &&\
-apt install -y nodejs=6.11.*
+sudo apt update &&\
+sudo apt install -y nodejs=6.11.*
+```
+##### Install Ruby on Rails
+```
+sudo gem install bundler:1.15.3 rails:5.1.2 --no-ri --no-rdoc
 ```
 ##### Install PostgreSQL
 ```
@@ -67,7 +64,13 @@ bundle update
 bundle exec rake
 bundle exec rspec
 ```
+##### Migratation
+```
+rake db:seed RAILS_ENV=production
+rake db:migrate RAILS_ENV=production
+```
+
 ##### Run RoR server
 ```
-rails s
+RAILS_ENV=production bundle exec passenger start
 ```

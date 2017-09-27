@@ -21,7 +21,9 @@ class AccountController < ActionController::API
                 account.first_name = params[:first_name]
                 account.last_name = params[:last_name]
                 account.gender = params[:gender]
-                account.language = 'ru'
+				account.language = 'ru'
+				account.sign_up_ip = request.remote_ip
+				account.sign_up_user_agent = request.user_agent
                 account.save!
                 
                 @response[:error] = 0

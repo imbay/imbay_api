@@ -46,7 +46,7 @@ gem 'redis', '~> 3.2'
 
 # Pagination for model.
 gem 'will_paginate', '~> 3.1.0'
-# File MIME types.
-gem 'mimemagic', '~> 0.3.1'
 # Magick.
 gem 'mini_magick', '~> 4.5'
+# Passenger server.
+gem 'passenger', '~> 5.0'
