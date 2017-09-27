@@ -9,6 +9,8 @@ module SessionHelper
             session.account = account
             session.expire_time = $time+2592000 # one month.
             session.session_key = sha256("#{account.id}_#{SecureRandom.uuid.to_s}")
+            session.ip = request.remote_ip
+            session.user_agent = request.user_agent
             session.save!
             return session.session_key
         else

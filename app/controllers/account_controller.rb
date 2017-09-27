@@ -51,6 +51,7 @@ class AccountController < ActionController::API
 
 	def sign_out
 		init_session(params[:session_key])
+		set_login_datetime()
 		if $is_auth == true
 			if delete_session
 				@response[:error] = 0
@@ -61,6 +62,7 @@ class AccountController < ActionController::API
 
 	def current_user
 		init_session(params[:session_key])
+		set_login_datetime()
 		if $is_auth == true
 			@response[:error] = 0
 			@response[:body] = $current_user
@@ -72,6 +74,7 @@ class AccountController < ActionController::API
 
 	def update
 		init_session(params[:session_key])
+		set_login_datetime()
 		if $is_auth == true
 			ActiveRecord::Base.transaction(isolation: :serializable) do
 				begin
@@ -91,6 +94,7 @@ class AccountController < ActionController::API
 	end
 	def update_username
 		init_session(params[:session_key])
+		set_login_datetime()
 		if $is_auth == true
 			ActiveRecord::Base.transaction(isolation: :serializable) do
 				begin
@@ -108,6 +112,7 @@ class AccountController < ActionController::API
 	end
 	def update_password
 		init_session(params[:session_key])
+		set_login_datetime()
 		if $is_auth == true
 			ActiveRecord::Base.transaction(isolation: :serializable) do
 				begin

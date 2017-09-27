@@ -16,7 +16,7 @@ Rails.application.routes.draw do
           post '/upload', to: 'photo#upload'
           post '/delete', to: 'photo#delete'
           post '/read_comments', to: 'photo#read_comments'
-          get '/list', to: 'photo#list'
+          get '/list', to: 'photo#photos'
           get '/content/:id', to: 'photo#content'
           get '/get', to: 'photo#get'
           post '/write_comment', to: 'photo#write_comment'

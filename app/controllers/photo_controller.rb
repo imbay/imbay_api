@@ -13,6 +13,7 @@ class PhotoController < ApplicationController
     
     def upload
         init_session(params[:session_key])
+        set_login_datetime()
 		if $is_auth == true
             photo = $current_user.photos.new
             photo.file = File.open(params[:photo].path)
@@ -55,7 +56,7 @@ class PhotoController < ApplicationController
         end
         render json: @response
     end
-    def list
+    def photos
         init_session(params[:session_key])
         if $is_auth == true
             begin
@@ -77,13 +78,16 @@ class PhotoController < ApplicationController
     end
     def get
         init_session(params[:session_key])
+        set_login_datetime()
         if $is_auth == true
             begin
                 @response[:error] = 0
                 gender = @normalizer.gender(params[:gender])
-                photo = Photo.joins(:account).select('id', 'accounts.username', 'accounts.first_name', 'accounts.last_name').order("views ASC, likes ASC, comments ASC").where("accounts.is_active = ? AND accounts.gender = ?", true, gender).all rescue nil
-                unless photo.nil?
-                    photo = photo[rand(photo.size)-1]
+                photos = Photo.joins(:account).select('id', 'accounts.username', 'accounts.first_name', 'accounts.last_name').order("views ASC, likes ASC, comments ASC").where("accounts.is_active = ? AND accounts.gender = ?", true, gender).all rescue nil
+                if photos.size == 0
+                    @response[:error] = 4
+                else
+                    photo = photos[rand(photos.size)-1]
                     like = photo.Likes.select(:up).find_by(account_id: $current_user.id) rescue nil
                     photo = photo.serializable_hash
                     if like == nil
@@ -92,8 +96,6 @@ class PhotoController < ApplicationController
                         photo['like'] = like[:up]
                     end
                     @response[:body] = photo
-                else
-                    @response[:error] = 4
                 end
             rescue
             end
@@ -102,6 +104,7 @@ class PhotoController < ApplicationController
     end
     def write_comment
         init_session(params[:session_key])
+        set_login_datetime()
         if $is_auth == true
             ActiveRecord::Base.transaction(isolation: :serializable) do
                 photo = Photo.find(params[:photo_id]) rescue nil
@@ -145,6 +148,7 @@ class PhotoController < ApplicationController
     end
     def to_like
         init_session(params[:session_key])
+        set_login_datetime()
         if $is_auth == true
             ActiveRecord::Base.transaction(isolation: :serializable) do
                 photo = Photo.find(params[:photo_id]) rescue nil
