@@ -60,8 +60,8 @@ class PhotoController < ApplicationController
         init_session(params[:session_key])
         if $is_auth == true
             begin
-                @response[:error] = 0
                 @response[:body] = $current_user.photos.select(:id, :views, :likes, :dislikes, :comments, :new_comments).limit(Photo::COUNT_LIMIT).order(new_comments: :desc, id: :desc).all
+                @response[:error] = 0
             rescue
             end
         end
@@ -81,9 +81,8 @@ class PhotoController < ApplicationController
         set_login_datetime()
         if $is_auth == true
             begin
-                @response[:error] = 0
                 gender = @normalizer.gender(params[:gender])
-                photos = Photo.joins(:account).select('id', 'accounts.username', 'accounts.first_name', 'accounts.last_name').order("views ASC, likes ASC, comments ASC").where("accounts.is_active = ? AND accounts.gender = ?", true, gender).all rescue nil
+                photos = Photo.joins(:account).select('id', 'accounts.username', 'accounts.first_name', 'accounts.last_name').order("views ASC").where("accounts.is_active = ? AND accounts.gender = ?", true, gender).limit(100).all rescue nil
                 if photos.size == 0
                     @response[:error] = 4
                 else
@@ -95,6 +94,7 @@ class PhotoController < ApplicationController
                     else
                         photo['like'] = like[:up]
                     end
+                    @response[:error] = 0
                     @response[:body] = photo
                 end
             rescue

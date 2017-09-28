@@ -1,7 +1,7 @@
 class Photo < ApplicationRecord
 	attr_accessor :file
 	SIZE_LIMIT = 5000000 # 5 MB.
-	COUNT_LIMIT = 20
+	COUNT_LIMIT = 100
 
 	belongs_to :account, class_name: "Account", foreign_key: "account_id"
 	has_many :Likes, class_name: "Like", foreign_key: "photo_id", dependent: :destroy

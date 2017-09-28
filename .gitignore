@@ -18,3 +18,7 @@
 !/tmp/.keep
 
 .byebug_history
+
+passenger.3000.pid
+passenger.3000.pid.lock
+

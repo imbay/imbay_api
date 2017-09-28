@@ -6,7 +6,7 @@ default: &default
   host: 127.0.0.1
   port: 5432
   username: nurasyl
-  password: z125cl77ia0dhoa
+  password: 12345
   database: imbay
 
 development:

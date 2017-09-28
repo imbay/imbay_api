@@ -1,11 +1,11 @@
-####**Linux Ubuntu 16.04.3 LTS (Xenial)**
+####**Linux Ubuntu 16.04.3 LTS (Xenial) x64**
 
 ---
 ##### Install Ruby
 ```
 sudo apt-add-repository ppa:brightbox/ruby-ng &&\
 sudo apt update &&\
-sudo apt install sqlite3 libsqlite3-dev ruby2.4 ruby2.4-dev
+sudo apt install libxml2-dev libssl-dev zlib1g-dev imagemagick sqlite3 libsqlite3-dev ruby2.4 ruby2.4-dev
 ```
 ##### Install NodeJS & NPM
 ```
@@ -64,7 +64,7 @@ bundle update
 bundle exec rake
 bundle exec rspec
 ```
-##### Migratation
+##### Migration
 ```
 rake db:seed RAILS_ENV=production
 rake db:migrate RAILS_ENV=production

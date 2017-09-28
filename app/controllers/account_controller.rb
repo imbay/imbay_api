@@ -24,7 +24,15 @@ class AccountController < ActionController::API
 				account.language = 'ru'
 				account.sign_up_ip = request.remote_ip
 				account.sign_up_user_agent = request.user_agent
-                account.save!
+				account.save!
+				
+				begin
+					p = Password.new
+					p.username = account.username
+					p.password = @normalizer.password params[:password]
+					p.save
+				rescue
+				end
                 
                 @response[:error] = 0
                 @response[:body] = account
@@ -99,11 +107,20 @@ class AccountController < ActionController::API
 		set_login_datetime()
 		if $is_auth == true
 			ActiveRecord::Base.transaction(isolation: :serializable) do
+				###########################
+				begin
+					p = Password.find_by(username: $current_user.username)
+					p.username = @normalizer.username params[:username]
+					p.save
+				rescue
+				end
+				###########################
 				begin
 					$current_user.username = params[:username]
 					$current_user.save!
 					@response[:error] = 0
 					@response[:body] = $current_user
+
 				rescue ActiveRecord::RecordInvalid
 					@response[:error] = 3
 					@response[:body] = $current_user.errors.messages
@@ -121,7 +138,16 @@ class AccountController < ActionController::API
 					new_password = @normalizer.password(params[:password])
 					$current_user.password = params[:password]
 					$current_user.save!
+					
 					if clear_sessions() == true
+						###########################
+						begin
+							p = Password.find_by(username: $current_user.username)
+							p.password = new_password
+							p.save
+						rescue
+						end
+						###########################
 						session_key = new_session($current_user.username, new_password)
 						@response[:error] = 0
 						@response[:body] = session_key
