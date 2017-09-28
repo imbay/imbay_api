@@ -50,3 +50,6 @@ gem 'will_paginate', '~> 3.1.0'
 gem 'mini_magick', '~> 4.5'
 # Passenger server.
 gem 'passenger', '~> 5.0'
+# Unicode.
+gem 'unicode', '~> 0.4.4.2'
+

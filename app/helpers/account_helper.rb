@@ -35,10 +35,10 @@ module AccountHelper
             @config = AccountConfiguration.new
         end
         def username value
-            value.to_s.strip.downcase
+            Unicode::downcase(value.to_s.strip)
         end
         def name value
-            value.to_s.strip.gsub(' ', '').capitalize
+            Unicode::capitalize(value.to_s.strip.gsub(' ', ''))
         end
         def gender value
             value = value.to_s.strip
@@ -51,7 +51,7 @@ module AccountHelper
             end
         end
         def email value
-            value = value.to_s.strip.downcase
+            value = Unicode::downcase(value.to_s.strip)
             if value == ""
                 return nil
             else
