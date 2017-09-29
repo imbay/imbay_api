@@ -127,6 +127,8 @@ module AccountHelper
         return BCrypt::Password.create(@normalizer.password(value)).to_s
     end
     def set_login_datetime
+        puts "test:"
+    puts $datatime
       begin
           if $is_auth == true
               $current_user.login_at = $datetime

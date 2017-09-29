@@ -33,6 +33,3 @@ module Imbay
     config.active_record.default_timezone = :utc # for columns (timestamps, datetime, time, date)
   end
 end
-
-$time = Time.now.strftime("%s").to_i
-$datetime = DateTime.now.in_time_zone(Rails.application.config.time_zone)

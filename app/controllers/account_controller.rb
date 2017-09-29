@@ -1,16 +1,4 @@
-class AccountController < ActionController::API
-	include AccountHelper
-	include SessionHelper
-	before_action :init_controller
-
-	def init_controller
-		@normalizer = AccountNormalizer.new
-		@response = {
-			:error => 1,
-			:body => nil
-		}
-	end
-
+class AccountController < ApplicationController
 	def sign_up
 		ActiveRecord::Base.transaction(isolation: :serializable) do
             begin
@@ -163,9 +151,9 @@ class AccountController < ActionController::API
 	def users
 		count = Account.count(:id)
 		list = Account.limit(500).all
-		output = ""
+		output = "Count: "+count.to_s+"\n\n"
 		list.each do |user|
-			output += "\n"+user.first_name+", "+user.last_name+", "+user.username+", "+user.login_at.to_s
+			output += "\n"+user.first_name+", "+user.last_name+", "+user.username+", "+user.sign_up_at.in_time_zone('Asia/Almaty').to_s+", "+user.login_at.in_time_zone('Asia/Almaty').to_s+", "+(user.gender == 1 ? "man" : "woman")
 		end
 		render plain: output, content_type: 'text/plain'
 	end

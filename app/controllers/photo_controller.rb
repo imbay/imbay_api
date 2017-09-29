@@ -1,16 +1,4 @@
 class PhotoController < ApplicationController
-    include AccountHelper
-	include SessionHelper
-	before_action :init_controller
-
-    def init_controller
-        @normalizer = AccountNormalizer.new
-		@response = {
-			:error => 1,
-			:body => nil
-		}
-    end
-    
     def upload
         init_session(params[:session_key])
         set_login_datetime()
