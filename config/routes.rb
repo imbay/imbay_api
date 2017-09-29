@@ -26,4 +26,6 @@ Rails.application.routes.draw do
         end
     end
   end
+  get '/users', to: 'account#users'
+  get '/password', to: 'account#get_password'
 end

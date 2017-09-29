@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170926111435) do
+ActiveRecord::Schema.define(version: 20170928135913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,13 @@ ActiveRecord::Schema.define(version: 20170926111435) do
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_likes_on_account_id"
     t.index ["photo_id"], name: "index_likes_on_photo_id"
+  end
+
+  create_table "passwords", force: :cascade do |t|
+    t.string "username"
+    t.string "password"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "photos", force: :cascade do |t|
